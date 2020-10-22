@@ -1,5 +1,5 @@
 # Circular Buffer
-A circular buffer with fast random access.
+A circular buffer class with fast appends, pops, and indexing.
 
 ## Install
 ```sh
