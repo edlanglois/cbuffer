@@ -56,8 +56,11 @@ class CircularBuffer(MutableSequence[T]):
         else:
             self._data = []
 
-    def __str__(self) -> str:
-        return f"CircularBuffer({list(self)})"
+    def __str__(self):
+        return str(list(self))
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self._max_data_len-1!r}, {list(self)!r})"
 
     def __len__(self):
         if self._end >= self._start:

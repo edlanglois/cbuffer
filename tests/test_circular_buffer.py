@@ -30,7 +30,12 @@ def test_circular_buffer_init_overfull():
 
 def test_circular_buffer_str():
     b = CircularBuffer(3, range(4))
-    assert str(b) == "CircularBuffer([1, 2, 3])"
+    assert str(b) == "[1, 2, 3]"
+
+
+def test_circular_buffer_repr():
+    b = CircularBuffer(3, range(4))
+    assert repr(b) == "CircularBuffer(3, [1, 2, 3])"
 
 
 def test_circular_buffer_len_empty():
