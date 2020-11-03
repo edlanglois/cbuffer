@@ -66,6 +66,11 @@ def test_circular_buffer_len_overfull_popleft():
     assert len(b) == 4
 
 
+def test_circular_buffer_maxlen():
+    b = CircularBuffer(5)
+    assert b.maxlen == 5
+
+
 def test_circular_buffer_getitem_empty_invalid():
     b = CircularBuffer(5)
     with pytest.raises(IndexError):

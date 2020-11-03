@@ -32,25 +32,25 @@ class CircularBuffer(MutableSequence[T]):
         - O(n) random insert / delete
     """
 
-    def __init__(self, size: int, data: Optional[Iterable[T]] = None):
+    def __init__(self, maxlen: int, data: Optional[Iterable[T]] = None):
         """Initialize a CircularBuffer
 
         Args:
-            size: Maximum size.
+            maxlen: Maximum number of elements.
             data: Optional initial data.
         """
         self._start = 0
         self._end = 0
-        # Data can grow to contain `size + 1` elements
+        # Data can grow to contain `maxlen + 1` elements
         # This enables distinguishing full vs empty states based on start/end indices.
         # Invariant:
         # If len(self._max_data_len) < self._max_data_len then self._start == 0
-        if size < 0:
-            raise ValueError("must have size >= 0")
-        self._max_data_len = size + 1
+        if maxlen < 0:
+            raise ValueError("must have maxlen >= 0")
+        self._max_data_len = maxlen + 1
         if data:
             data_iter = iter(data)
-            self._data: List[Optional[T]] = list(itertools.islice(data_iter, size))
+            self._data: List[Optional[T]] = list(itertools.islice(data_iter, maxlen))
             self._end = len(self._data)
             self.extend(data_iter)
         else:
@@ -66,12 +66,16 @@ class CircularBuffer(MutableSequence[T]):
         if self._end >= self._start:
             return self._end - self._start
         else:
-            # Data size minus number of empty elements between start/end
+            # Data maxlen minus number of empty elements between start/end
             return self._max_data_len - (self._start - self._end)
+
+    @property
+    def maxlen(self) -> int:
+        return self._max_data_len - 1
 
     def _data_index(self, index: int) -> int:
         if index < 0:
-            index = len(self) + index
+            index += len(self)
         i = self._start + index
         if i >= self._max_data_len:
             i -= self._max_data_len
